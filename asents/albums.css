@@ -1,0 +1,213 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+.albums-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    padding: 1rem;
+}
+.album-card {
+    background: var(--card-bg);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+    cursor: pointer;
+    border: 1px solid rgba(108, 99, 255, 0.1);
+}
+.album-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+}
+.album-image {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+.album-info {
+    padding: 1rem;
+}
+.album-info h3 {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.album-info p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 0.25rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.album-info i {
+    color: var(--primary-color);
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 11, 30, 0.8);
+    backdrop-filter: blur(8px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+.modal {
+    background: var(--card-bg);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 800px;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    border: 1px solid rgba(108, 99, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 2;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+.modal-content {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    padding: 2rem;
+}
+.modal-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+.modal-info h2 {
+    color: var(--text-primary);
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.modal-info p {
+    color: var(--text-secondary);
+    margin: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+}
+.modal-info i {
+    color: var(--primary-color);
+}
+.tracks-list {
+    margin-top: 1.5rem;
+    border-top: 1px solid rgba(108, 99, 255, 0.1);
+    padding-top: 1.5rem;
+}
+.track-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    border-radius: 8px;
+    margin: 0.25rem 0;
+    transition: background-color 0.2s ease;
+}
+.track-item:hover {
+    background: rgba(108, 99, 255, 0.1);
+}
+.track-number {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    width: 24px;
+    text-align: center;
+}
+.track-info {
+    flex: 1;
+    margin-left: 1rem;
+}
+.track-title {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+.track-duration {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-left: 1rem;
+}
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-secondary);
+    grid-column: 1 / -1;
+}
+.empty-state i {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+.empty-state p {
+    font-size: 1.1rem;
+    margin: 0;
+}
+@media (max-width: 1200px) {
+    .albums-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+@media (max-width: 900px) {
+    .albums-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .modal-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    .modal-image {
+        height: 250px;
+    }
+}
+@media (max-width: 600px) {
+    .albums-grid {
+        grid-template-columns: 1fr;
+    }
+    .container {
+        padding: 1rem;
+    }
+    .modal {
+        margin: 1rem;
+    }
+} 

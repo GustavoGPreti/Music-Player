@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gustavo Gomes Preti - Álbuns</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="asents/style.css">
+    <link rel="stylesheet" href="asents/albums.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">
+                <span class="logo-text">Gustavo Gomes Preti</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="pagina/index.html"><i class="fas fa-plus-circle"></i> Cadastrar</a></li>
+                <li><a href="albums.html" class="active"><i class="fas fa-compact-disc"></i> Álbuns</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="albums-grid" id="albumsGrid"></div>
+    </div>
+
+    <div class="modal-overlay" id="album-modal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-content" id="modal-content"></div>
+        </div>
+    </div>
+
+    <footer class="app-footer">
+        <p>&copy; 2024 Gustavo Gomes Preti - Todos os direitos reservados</p>
+    </footer>
+
+    <script>
+        async function loadAlbums() {
+            const container = document.getElementById('albumsGrid');
+            try {
+                const response = await fetch('http://localhost:3000/albums');
+                if (!response.ok) throw new Error('Erro ao buscar álbuns');
+                const albums = await response.json();
+                if (albums.length === 0) {
+                    container.innerHTML = `<div class="empty-state"><i class="fas fa-music"></i><p>Nenhum álbum cadastrado ainda</p></div>`;
+                    return;
+                }
+                container.innerHTML = albums.map(album => `
+                    <div class="album-card" onclick="showAlbumDetails(${album.id_album})">
+                        <img src="./asents/img/download (4).jpeg" alt="${album.nome_album}" class="album-image">
+                        <div class="album-info">
+                            <h3>${album.nome_album}</h3>
+                            <p><i class="fas fa-user"></i> ${album.nome_artista_album}</p>
+                            <p><i class="fas fa-music"></i> ${album.genero_album}</p>
+                            <p><i class="fas fa-calendar"></i> ${new Date(album.data_lancamento).toLocaleDateString('pt-BR')}</p>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                container.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>Erro ao carregar os álbuns</p></div>`;
+            }
+        }
+
+        async function showAlbumDetails(albumId) {
+            const modalOverlay = document.getElementById('album-modal');
+            const modalContent = document.getElementById('modal-content');
+            try {
+                const albumResponse = await fetch(`http://localhost:3000/albums/${albumId}`);
+                if (!albumResponse.ok) throw new Error('Erro ao buscar detalhes do álbum');
+                const album = await albumResponse.json();
+
+                const musicasResponse = await fetch(`http://localhost:3000/musicas/${albumId}`);
+                if (!musicasResponse.ok) throw new Error('Erro ao buscar músicas');
+                const musicas = await musicasResponse.json();
+
+                modalContent.innerHTML = `
+                    <div class="modal-image-container">
+                        <img src="./asents/img/download (4).jpeg" alt="${album.nome_album}" class="modal-image">
+                    </div>
+                    <div class="modal-info">
+                        <h2>${album.nome_album}</h2>
+                        <p><i class="fas fa-user"></i> ${album.nome_artista_album}</p>
+                        <p><i class="fas fa-music"></i> ${album.genero_album}</p>
+                        <p><i class="fas fa-calendar"></i> ${new Date(album.data_lancamento).toLocaleDateString('pt-BR')}</p>
+                        <p><i class="fas fa-list"></i> ${musicas.length} música${musicas.length !== 1 ? 's' : ''}</p>
+                        
+                        <div class="tracks-list">
+                            ${musicas.map(musica => `
+                                <div class="track-item">
+                                    <span class="track-number">${musica.numero_musica}</span>
+                                    <div class="track-info">
+                                        <span class="track-title">${musica.nome_musica}</span>
+                                    </div>
+                                    <span class="track-duration">${musica.duracao_musica}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+
+                modalOverlay.style.display = 'flex';
+            } catch (error) {
+                alert('Erro ao carregar detalhes do álbum');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('album-modal').style.display = 'none';
+        }
+
+        document.getElementById('album-modal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', loadAlbums);
+    </script>
+</body>
+</html> 
